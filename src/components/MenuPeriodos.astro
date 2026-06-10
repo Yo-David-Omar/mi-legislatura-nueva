@@ -1,0 +1,39 @@
+---
+import { getCollection } from 'astro:content';
+
+// Cargar todos los períodos desde la colección
+const periodos = await getCollection('periodos');
+const periodosOrdenados = periodos.sort((a, b) => b.data.numero - a.data.numero);
+---
+
+<!-- SIDEBAR IZQUIERDO CON DROPDOWNS -->
+<aside class="w-full md:w-72 flex-shrink-0 space-y-4">
+  {periodosOrdenados.map((periodo) => (
+    <div x-data="{ open: false }" class="group">
+      <!-- Botón del Período -->
+      <button 
+        @click="open = !open"
+        class="w-full text-left bg-blue-900 hover:bg-blue-800 text-white py-4 px-5 rounded-lg shadow-lg font-bold flex justify-between items-center transition-all"
+      >
+        <span class="text-lg">Período {periodo.data.numero}</span>
+        <i class="bi bi-chevron-down transition-transform duration-300" :class="{'rotate-180': open}"></i>
+      </button>
+      
+      <!-- Menú Desplegable -->
+      <ul x-show="open" x-transition class="mt-2 bg-white rounded-lg shadow-xl overflow-hidden border-2 border-blue-900/20">
+        {periodo.data.secciones.map((seccion) => (
+          <li>
+            <a href={seccion.url} class="block px-5 py-3 text-sm text-gray-700 hover:bg-blue-100 hover:text-blue-900 transition border-b border-gray-100 last:border-0 font-medium">
+              {seccion.nombre}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  ))}
+
+  <!-- Botón "Qué es un período" -->
+  <a href="#" class="block w-full text-center bg-blue-100 hover:bg-blue-200 text-blue-900 py-3 px-4 rounded-lg text-sm font-bold mt-4 transition border-2 border-blue-300">
+    ¿QUÉ ES UN PERÍODO LEGISLATIVO?
+  </a>
+</aside>

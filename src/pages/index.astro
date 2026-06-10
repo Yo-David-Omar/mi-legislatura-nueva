@@ -1,48 +1,38 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import { getCollection } from 'astro:content';
-
-const periodos = await getCollection('periodos');
-const periodosOrdenados = periodos.sort((a, b) => b.data.numero - a.data.numero);
 ---
 
 <Layout title="Inicio">
   
-  <!-- Sección central con el Libro (Efecto visual) -->
-  <div class="flex flex-col items-center justify-center text-center space-y-8">
+  <!-- Sección central con el Libro -->
+  <div class="flex flex-col items-center justify-center space-y-8">
     
-    <!-- Imagen del Libro (Placeholder por ahora) -->
-    <div class="relative w-full max-w-2xl mx-auto perspective-1000">
-      <!-- Aquí iría tu imagen del libro real -->
-      <div class="bg-amber-900 text-amber-100 p-8 rounded-r-2xl rounded-l-sm shadow-2xl border-l-8 border-amber-950 transform hover:rotate-y-6 transition-transform duration-500">
-        <div class="text-center border-2 border-amber-200/30 p-6 rounded">
-          <h2 class="text-2xl font-black uppercase tracking-widest mb-4">Poder Legislativo</h2>
-          <div class="w-16 h-16 bg-amber-100 rounded-full mx-auto mb-4 flex items-center justify-center text-amber-900">
-             <i class="bi bi-bank text-3xl"></i>
-          </div>
-          <h3 class="text-xl font-bold mb-2">Honorable Legislatura</h3>
-          <p class="text-sm opacity-80">Dirección de Taquígrafos</p>
-        </div>
-      </div>
+    <!-- Imagen del Libro Real -->
+    <div class="w-full max-w-3xl mx-auto">
+      <img 
+        src="/libros/libro-taquigrafos.jpg" 
+        alt="Libro de Taquígrafos - Poder Legislativo" 
+        class="w-full h-auto rounded-lg shadow-2xl"
+      >
     </div>
 
-    <!-- Botones rápidos (Opcional) -->
-    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 w-full max-w-3xl mt-12">
-      <a href="/periodos" class="bg-white/80 hover:bg-white p-4 rounded shadow border border-gray-200 text-center hover:text-blue-900 transition">
-        <i class="bi bi-calendar-check text-3xl block mb-2 text-blue-900"></i>
-        <span class="text-sm font-bold">Períodos</span>
+    <!-- Botones de acceso rápido -->
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 w-full max-w-3xl mt-8">
+      <a href="/periodos" class="bg-white hover:bg-blue-50 p-6 rounded-lg shadow-lg border-2 border-blue-900 text-center hover:shadow-xl transition">
+        <i class="bi bi-calendar-check text-4xl block mb-3 text-blue-900"></i>
+        <span class="text-sm font-bold text-gray-800">Períodos</span>
       </a>
-      <a href="#" class="bg-white/80 hover:bg-white p-4 rounded shadow border border-gray-200 text-center hover:text-blue-900 transition">
-        <i class="bi bi-journal-text text-3xl block mb-2 text-blue-900"></i>
-        <span class="text-sm font-bold">Diario de Sesiones</span>
+      <a href="#" class="bg-white hover:bg-blue-50 p-6 rounded-lg shadow-lg border-2 border-blue-900 text-center hover:shadow-xl transition">
+        <i class="bi bi-journal-text text-4xl block mb-3 text-blue-900"></i>
+        <span class="text-sm font-bold text-gray-800">Diario de Sesiones</span>
       </a>
-      <a href="#" class="bg-white/80 hover:bg-white p-4 rounded shadow border border-gray-200 text-center hover:text-blue-900 transition">
-        <i class="bi bi-people text-3xl block mb-2 text-blue-900"></i>
-        <span class="text-sm font-bold">Legisladores</span>
+      <a href="#" class="bg-white hover:bg-blue-50 p-6 rounded-lg shadow-lg border-2 border-blue-900 text-center hover:shadow-xl transition">
+        <i class="bi bi-people text-4xl block mb-3 text-blue-900"></i>
+        <span class="text-sm font-bold text-gray-800">Legisladores</span>
       </a>
-      <a href="#" class="bg-white/80 hover:bg-white p-4 rounded shadow border border-gray-200 text-center hover:text-blue-900 transition">
-        <i class="bi bi-file-earmark-text text-3xl block mb-2 text-blue-900"></i>
-        <span class="text-sm font-bold">Leyes</span>
+      <a href="#" class="bg-white hover:bg-blue-50 p-6 rounded-lg shadow-lg border-2 border-blue-900 text-center hover:shadow-xl transition">
+        <i class="bi bi-file-earmark-text text-4xl block mb-3 text-blue-900"></i>
+        <span class="text-sm font-bold text-gray-800">Leyes</span>
       </a>
     </div>
 

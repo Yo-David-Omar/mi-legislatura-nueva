@@ -5,7 +5,6 @@ interface Props {
 
 const { title } = Astro.props;
 
-// Lista de navegación superior (igual a tu maquetación)
 const navLinks = [
   { text: "INICIO", url: "/" },
   { text: "AUTORIDADES", url: "#" },
@@ -17,7 +16,6 @@ const navLinks = [
   { text: "CUADRO DE LEYES", url: "#" },
 ];
 
-// Datos de ejemplo para los dropdowns (luego esto vendrá de tu base de datos)
 const periodosMenu = [
   { 
     id: "120", 
@@ -38,107 +36,95 @@ const periodosMenu = [
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-    <!-- Fuente Serif para dar el toque institucional -->
     <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700;900&display=swap" rel="stylesheet">
     <title>{title} - Legislatura de Tucumán</title>
-    <style is:global>
-      @tailwind base;
-      @tailwind components;
-      @tailwind utilities;
-      
-      body {
-        font-family: 'Merriweather', serif;
-      }
-      /* Color institucional rojo */
-      .bg-legislatura { background-color: #8B0000; }
-      .bg-legislatura-dark { background-color: #600000; }
-      .text-legislatura { color: #8B0000; }
-    </style>
   </head>
   
-  <body class="bg-gray-100 relative min-h-screen bg-cover bg-center bg-fixed" style="background-image: url('/imagenescudo/sueñosconcretados.jpg');">
+  <body class="bg-gray-100 min-h-screen" style="font-family: 'Merriweather', serif;">
     
-    <!-- Overlay oscuro para que el texto resalte sobre la foto -->
-    <div class="absolute inset-0 bg-white/30 z-0 pointer-events-none"></div>
-
     <!-- 1. BARRA DE NAVEGACIÓN SUPERIOR (ROJA) -->
-    <nav class="relative z-20 bg-legislatura text-white text-xs md:text-sm shadow-lg">
-      <div class="container mx-auto px-2">
-        <!-- Menú Horizontal (Oculto en móviles muy pequeños) -->
-        <ul class="hidden md:flex flex-wrap justify-center gap-x-4 gap-y-1 py-2">
+    <nav class="bg-red-900 text-white shadow-lg">
+      <div class="container mx-auto px-4">
+        <!-- Menú Horizontal Desktop -->
+        <ul class="hidden md:flex flex-wrap justify-center gap-6 py-3 text-sm font-bold">
           {navLinks.map((link) => (
             <li>
-              <a href={link.url} class="hover:text-yellow-300 transition font-bold tracking-wide">
+              <a href={link.url} class="hover:text-yellow-300 transition tracking-wide">
                 {link.text}
               </a>
             </li>
           ))}
         </ul>
-        <!-- Menú Hamburguesa para móvil -->
-        <div x-data="{ open: false }" class="md:hidden flex justify-center py-2">
-           <button @click="open = !open" class="text-white border border-white px-3 py-1 rounded">
-              <i class="bi bi-list"></i> MENÚ
-           </button>
-           <ul x-show="open" @click.outside="open = false" class="absolute top-full left-0 w-full bg-legislatura-dark flex flex-col p-4 gap-2 text-center shadow-xl">
-              {navLinks.map((link) => (
-                <li><a href={link.url} class="block py-2 border-b border-white/20 hover:bg-white/10">{link.text}</a></li>
-              ))}
-           </ul>
+        
+        <!-- Menú Hamburguesa Móvil -->
+        <div x-data="{ open: false }" class="md:hidden flex justify-center py-3">
+          <button @click="open = !open" class="text-white border-2 border-white px-4 py-2 rounded font-bold">
+            <i class="bi bi-list mr-2"></i>MENÚ
+          </button>
+          <ul x-show="open" @click.outside="open = false" class="absolute top-full left-0 w-full bg-red-950 flex flex-col p-4 gap-2 text-center shadow-xl z-50">
+            {navLinks.map((link) => (
+              <li>
+                <a href={link.url} class="block py-3 border-b border-white/20 hover:bg-white/10 font-bold">
+                  {link.text}
+                </a>
+              </li>
+            ))}
+          </ul>
         </div>
       </div>
     </nav>
 
     <!-- 2. HEADER INSTITUCIONAL -->
-    <header class="relative z-20 bg-white/90 backdrop-blur-sm shadow-md py-4 text-center">
-      <div class="container mx-auto px-4 flex flex-col md:flex-row items-center justify-between">
+    <header class="bg-white/95 backdrop-blur-sm shadow-md py-6">
+      <div class="container mx-auto px-4 flex flex-col md:flex-row items-center justify-between gap-4">
         
-        <!-- Logo (Placeholder) -->
+        <!-- Logo/Escudo -->
         <div class="mb-4 md:mb-0">
-           <img src="/imagenesescudo/hlegislatura.png" alt="Escudo Legislatura" class="h-20 w-auto">
+          <img src="/imagenesescudo/escudo.png" alt="Escudo Legislatura" class="h-20 w-auto">
         </div>
 
         <!-- Título -->
-        <div class="flex-grow">
+        <div class="flex-grow text-center md:text-left">
           <h1 class="text-2xl md:text-3xl font-black text-gray-800 tracking-wider uppercase">
             HONORABLE LEGISLATURA DE TUCUMÁN
           </h1>
         </div>
 
         <!-- Reloj -->
-        <div class="mt-2 md:mt-0 bg-gray-100 px-4 py-2 rounded border border-gray-300 shadow-inner">
-          <span id="clock" class="font-mono text-xl font-bold text-legislatura">00:00:00</span>
+        <div class="bg-gray-100 px-6 py-3 rounded-lg border-2 border-gray-300 shadow-inner">
+          <span id="clock" class="font-mono text-2xl font-bold text-red-900">00:00:00</span>
         </div>
       </div>
     </header>
 
     <!-- 3. SUB-BARRA (DIRECCIÓN DE TAQUÍGRAFOS) -->
-    <div class="relative z-20 bg-legislatura-dark text-white py-2 text-center shadow-md">
-      <h2 class="text-sm md:text-lg font-bold tracking-widest uppercase">
+    <div class="bg-red-950 text-white py-3 text-center shadow-md">
+      <h2 class="text-base md:text-lg font-bold tracking-widest uppercase">
         <i class="bi bi-book-half mr-2"></i> DIRECCIÓN DE TAQUÍGRAFOS
       </h2>
     </div>
 
     <!-- 4. ESTRUCTURA PRINCIPAL (SIDEBAR + CONTENIDO) -->
-    <div class="relative z-10 container mx-auto px-4 py-8 min-h-screen flex flex-col md:flex-row gap-8">
+    <div class="container mx-auto px-4 py-8 min-h-screen flex flex-col md:flex-row gap-8">
       
       <!-- SIDEBAR IZQUIERDO (DROPDOWNS DE PERÍODOS) -->
-      <aside class="w-full md:w-64 flex-shrink-0 space-y-4">
+      <aside class="w-full md:w-72 flex-shrink-0 space-y-4">
         {periodosMenu.map((periodo) => (
           <div x-data="{ open: false }" class="group">
             <!-- Botón del Período -->
             <button 
               @click="open = !open"
-              class="w-full text-left bg-blue-900/90 hover:bg-blue-800 text-white py-3 px-4 rounded-lg shadow-lg font-bold flex justify-between items-center transition-all"
+              class="w-full text-left bg-blue-900 hover:bg-blue-800 text-white py-4 px-5 rounded-lg shadow-lg font-bold flex justify-between items-center transition-all"
             >
-              <span>{periodo.label}</span>
+              <span class="text-lg">{periodo.label}</span>
               <i class="bi bi-chevron-down transition-transform duration-300" :class="{'rotate-180': open}"></i>
             </button>
             
             <!-- Menú Desplegable -->
-            <ul x-show="open" x-transition class="mt-1 bg-white/95 backdrop-blur rounded-lg shadow-xl overflow-hidden border border-blue-900/20">
+            <ul x-show="open" x-transition class="mt-2 bg-white rounded-lg shadow-xl overflow-hidden border-2 border-blue-900/20">
               {periodo.items.map((item) => (
                 <li>
-                  <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-100 hover:text-blue-900 transition border-b border-gray-100 last:border-0">
+                  <a href="#" class="block px-5 py-3 text-sm text-gray-700 hover:bg-blue-100 hover:text-blue-900 transition border-b border-gray-100 last:border-0 font-medium">
                     {item}
                   </a>
                 </li>
@@ -148,12 +134,12 @@ const periodosMenu = [
         ))}
 
         <!-- Botón "Qué es un período" -->
-        <a href="#" class="block w-full text-center bg-blue-100 hover:bg-blue-200 text-blue-900 py-2 px-4 rounded-lg text-sm font-bold mt-4 transition border border-blue-300">
+        <a href="#" class="block w-full text-center bg-blue-100 hover:bg-blue-200 text-blue-900 py-3 px-4 rounded-lg text-sm font-bold mt-4 transition border-2 border-blue-300">
           ¿QUÉ ES UN PERÍODO LEGISLATIVO?
         </a>
       </aside>
 
-      <!-- CONTENIDO PRINCIPAL (Aquí va tu libro, tablas, etc.) -->
+      <!-- CONTENIDO PRINCIPAL -->
       <main class="flex-grow w-full">
         <slot />
       </main>
@@ -164,7 +150,7 @@ const periodosMenu = [
     <a 
       href="https://wa.me/5493811234567" 
       target="_blank"
-      class="fixed bottom-6 right-6 z-50 bg-green-500 hover:bg-green-600 text-white p-4 rounded-full shadow-xl hover:scale-110 transition-all duration-300 flex items-center gap-2 group"
+      class="fixed bottom-6 right-6 z-50 bg-green-500 hover:bg-green-600 text-white px-5 py-4 rounded-full shadow-xl hover:scale-110 transition-all duration-300 flex items-center gap-2 group"
     >
       <i class="bi bi-whatsapp text-3xl"></i>
       <span class="max-w-0 overflow-hidden group-hover:max-w-xs transition-all duration-500 whitespace-nowrap font-bold">

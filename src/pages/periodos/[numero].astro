@@ -1,10 +1,10 @@
 ---
-import { getCollection } from 'astro:content';
+import { getCollection, type CollectionEntry } from 'astro:content';
 import Layout from '../../layouts/Layout.astro';
 
 export async function getStaticPaths() {
   const periodos = await getCollection('periodos');
-  return periodos.map((periodo) => ({
+  return periodos.map((periodo: CollectionEntry<'periodos'>) => ({
     params: { numero: periodo.id },
     props: { periodo },
   }));
@@ -14,29 +14,75 @@ const { periodo } = Astro.props;
 ---
 
 <Layout title={periodo.data.titulo}>
-  <div class="mb-8">
-    <a href="/" class="text-blue-600 hover:underline">← Volver al inicio</a>
-    <h1 class="text-4xl font-bold text-blue-900 mt-4">
-      {periodo.data.titulo}
-    </h1>
-    <p class="text-gray-600 text-lg">{periodo.data.anio}</p>
+  <!-- Breadcrumb -->
+  <div class="bg-white border-b">
+    <div class="container mx-auto px-4 py-3">
+      <nav class="flex items-center text-sm">
+        <a href="/" class="text-blue-600 hover:text-blue-800">
+          <i class="bi bi-house-door mr-1"></i>Inicio
+        </a>
+        <i class="bi bi-chevron-right mx-2 text-gray-400"></i>
+        <span class="text-gray-600">{periodo.data.titulo}</span>
+      </nav>
+    </div>
   </div>
 
-  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-    {periodo.data.secciones.map((seccion) => (
-      <a 
-        href={seccion.url}
-        class="bg-white p-6 rounded-lg shadow-md hover:shadow-xl transition border-l-4 border-blue-900"
-      >
-        <h2 class="text-xl font-bold text-gray-800 mb-2">
-          {seccion.nombre}
-        </h2>
-        <p class="text-blue-600 text-sm">Ver contenido →</p>
-      </a>
-    ))}
-  </div>
+  <!-- Header del Período -->
+  <section class="bg-gradient-to-r from-blue-900 to-blue-700 text-white py-12">
+    <div class="container mx-auto px-4">
+      <div class="flex items-center gap-4 mb-4">
+        <div class="bg-white/20 p-4 rounded-xl">
+          <i class="bi bi-calendar-range text-4xl"></i>
+        </div>
+        <div>
+          <h1 class="text-3xl md:text-5xl font-bold">
+            {periodo.data.titulo}
+          </h1>
+          <p class="text-blue-200 text-lg mt-1">{periodo.data.anio}</p>
+        </div>
+      </div>
+      {periodo.data.descripcion && (
+        <p class="text-blue-100 max-w-3xl mt-4">{periodo.data.descripcion}</p>
+      )}
+    </div>
+  </section>
 
-  <article class="bg-white p-6 rounded-lg shadow-md mt-8 prose max-w-none">
-    <div set:html={periodo.body} />
-  </article>
+  <!-- Grid de Secciones -->
+  <section class="container mx-auto px-4 py-12">
+    <h2 class="text-2xl font-bold text-gray-800 mb-6">
+      <i class="bi bi-grid-3x3-gap mr-2 text-blue-900"></i>
+      Secciones del Período
+    </h2>
+    
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      {periodo.data.secciones.map((seccion) => (
+        <a 
+          href={seccion.url}
+          class="group bg-white p-6 rounded-xl shadow-md hover:shadow-xl transition-all duration-300 border-l-4 border-blue-900 hover:border-blue-600 hover:-translate-y-1"
+        >
+          <div class="flex items-center gap-4 mb-3">
+            <div class="bg-blue-100 p-3 rounded-lg group-hover:bg-blue-900 transition-colors">
+              {seccion.icono && (
+                <i class={`bi ${seccion.icono} text-2xl text-blue-900 group-hover:text-white`}></i>
+              )}
+            </div>
+            <h3 class="text-lg font-bold text-gray-800 group-hover:text-blue-900">
+              {seccion.nombre}
+            </h3>
+          </div>
+          <div class="flex items-center text-blue-600 text-sm font-medium">
+            <span>Ver contenido</span>
+            <i class="bi bi-arrow-right ml-2 group-hover:translate-x-1 transition-transform"></i>
+          </div>
+        </a>
+      ))}
+    </div>
+  </section>
+
+  <!-- Contenido Markdown -->
+  <section class="container mx-auto px-4 pb-12">
+    <article class="bg-white p-8 rounded-xl shadow-md prose max-w-none prose-headings:text-blue-900 prose-a:text-blue-600">
+      <div set:html={periodo.body} />
+    </article>
+  </section>
 </Layout>

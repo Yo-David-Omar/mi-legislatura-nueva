@@ -4,6 +4,32 @@ interface Props {
 }
 
 const { title } = Astro.props;
+
+// Lista de navegación superior (igual a tu maquetación)
+const navLinks = [
+  { text: "INICIO", url: "/" },
+  { text: "AUTORIDADES", url: "#" },
+  { text: "MANDATOS Y SEC. ELECTORALES", url: "#" },
+  { text: "INDICE TEMÁTICO", url: "#" },
+  { text: "ACTIVIDAD PARLAMENTARIA", url: "#" },
+  { text: "COMISIONES", url: "#" },
+  { text: "DIARIO DE SESIONES", url: "/diario-sesiones" },
+  { text: "CUADRO DE LEYES", url: "#" },
+];
+
+// Datos de ejemplo para los dropdowns (luego esto vendrá de tu base de datos)
+const periodosMenu = [
+  { 
+    id: "120", 
+    label: "Período 120", 
+    items: ["Autoridades", "Diario de Sesiones", "Índice Temático", "Cuadro de Leyes"] 
+  },
+  { 
+    id: "119", 
+    label: "Período 119", 
+    items: ["Autoridades", "Diario de Sesiones", "Cuadro de Leyes"] 
+  },
+];
 ---
 
 <!doctype html>
@@ -11,120 +37,151 @@ const { title } = Astro.props;
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <meta name="generator" content={Astro.generator} />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <!-- Fuente Serif para dar el toque institucional -->
+    <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700;900&display=swap" rel="stylesheet">
     <title>{title} - Legislatura de Tucumán</title>
+    <style is:global>
+      @tailwind base;
+      @tailwind components;
+      @tailwind utilities;
+      
+      body {
+        font-family: 'Merriweather', serif;
+      }
+      /* Color institucional rojo */
+      .bg-legislatura { background-color: #8B0000; }
+      .bg-legislatura-dark { background-color: #600000; }
+      .text-legislatura { color: #8B0000; }
+    </style>
   </head>
-  <body class="bg-gray-50 min-h-screen flex flex-col">
+  
+  <body class="bg-gray-100 relative min-h-screen bg-cover bg-center bg-fixed" style="background-image: url('/imagenescudo/sueñosconcretados.jpg');">
     
-    <!-- HEADER INSTITUCIONAL -->
-    <header class="bg-gradient-to-r from-blue-900 to-blue-700 text-white py-6 shadow-lg">
-      <div class="container mx-auto px-4 flex flex-col md:flex-row items-center justify-between gap-4">
-        <div class="flex items-center gap-4">
-          <i class="bi bi-bank text-4xl md:text-5xl"></i>
-          <div>
-            <h1 class="text-xl md:text-2xl font-bold tracking-wide">HONORABLE LEGISLATURA</h1>
-            <p class="text-blue-200 text-sm md:text-base">de la Provincia de Tucumán</p>
-          </div>
-        </div>
-        <div class="text-center md:text-right">
-          <p class="text-xs text-blue-200">República Argentina</p>
-        </div>
-      </div>
-    </header>
+    <!-- Overlay oscuro para que el texto resalte sobre la foto -->
+    <div class="absolute inset-0 bg-white/30 z-0 pointer-events-none"></div>
 
-    <!-- NAVBAR RESPONSIVE -->
-    <nav class="bg-white shadow-md sticky top-0 z-40" x-data="{ open: false }">
-      <div class="container mx-auto px-4">
-        <div class="flex justify-between items-center py-3">
-          <a href="/" class="text-blue-900 font-bold text-lg hover:text-blue-700 transition">
-            <i class="bi bi-house-door mr-2"></i>Inicio
-          </a>
-          
-          <!-- Botón hamburguesa (solo visible en móvil) -->
-          <button 
-            @click="open = !open" 
-            class="md:hidden text-blue-900 focus:outline-none"
-            aria-label="Menú"
-          >
-            <i class="bi bi-list text-3xl"></i>
-          </button>
-
-          <!-- Menú de escritorio (visible en desktop) -->
-          <div class="hidden md:flex gap-6 items-center">
-            <a href="/" class="text-gray-700 hover:text-blue-900 transition font-medium">
-              <i class="bi bi-calendar-range mr-1"></i>Períodos
-            </a>
-            <a href="#" class="text-gray-700 hover:text-blue-900 transition font-medium">
-              <i class="bi bi-people mr-1"></i>Legisladores
-            </a>
-            <a href="#" class="text-gray-700 hover:text-blue-900 transition font-medium">
-              <i class="bi bi-diagram-3 mr-1"></i>Comisiones
-            </a>
-            <a href="#" class="text-gray-700 hover:text-blue-900 transition font-medium">
-              <i class="bi bi-info-circle mr-1"></i>Información
-            </a>
-          </div>
-        </div>
-
-        <!-- Menú móvil (se despliega al hacer clic) -->
-        <div x-show="open" x-transition class="md:hidden pb-4">
-          <div class="flex flex-col gap-2">
-            <a href="/" class="text-gray-700 hover:bg-blue-50 hover:text-blue-900 py-2 px-3 rounded transition">
-              <i class="bi bi-calendar-range mr-2"></i>Períodos
-            </a>
-            <a href="#" class="text-gray-700 hover:bg-blue-50 hover:text-blue-900 py-2 px-3 rounded transition">
-              <i class="bi bi-people mr-2"></i>Legisladores
-            </a>
-            <a href="#" class="text-gray-700 hover:bg-blue-50 hover:text-blue-900 py-2 px-3 rounded transition">
-              <i class="bi bi-diagram-3 mr-2"></i>Comisiones
-            </a>
-            <a href="#" class="text-gray-700 hover:bg-blue-50 hover:text-blue-900 py-2 px-3 rounded transition">
-              <i class="bi bi-info-circle mr-2"></i>Información
-            </a>
-          </div>
+    <!-- 1. BARRA DE NAVEGACIÓN SUPERIOR (ROJA) -->
+    <nav class="relative z-20 bg-legislatura text-white text-xs md:text-sm shadow-lg">
+      <div class="container mx-auto px-2">
+        <!-- Menú Horizontal (Oculto en móviles muy pequeños) -->
+        <ul class="hidden md:flex flex-wrap justify-center gap-x-4 gap-y-1 py-2">
+          {navLinks.map((link) => (
+            <li>
+              <a href={link.url} class="hover:text-yellow-300 transition font-bold tracking-wide">
+                {link.text}
+              </a>
+            </li>
+          ))}
+        </ul>
+        <!-- Menú Hamburguesa para móvil -->
+        <div x-data="{ open: false }" class="md:hidden flex justify-center py-2">
+           <button @click="open = !open" class="text-white border border-white px-3 py-1 rounded">
+              <i class="bi bi-list"></i> MENÚ
+           </button>
+           <ul x-show="open" @click.outside="open = false" class="absolute top-full left-0 w-full bg-legislatura-dark flex flex-col p-4 gap-2 text-center shadow-xl">
+              {navLinks.map((link) => (
+                <li><a href={link.url} class="block py-2 border-b border-white/20 hover:bg-white/10">{link.text}</a></li>
+              ))}
+           </ul>
         </div>
       </div>
     </nav>
 
-    <!-- CONTENIDO PRINCIPAL -->
-    <main class="flex-grow">
-      <slot />
-    </main>
-    <!-- BOTÓN FLOTANTE DE WHATSAPP -->
+    <!-- 2. HEADER INSTITUCIONAL -->
+    <header class="relative z-20 bg-white/90 backdrop-blur-sm shadow-md py-4 text-center">
+      <div class="container mx-auto px-4 flex flex-col md:flex-row items-center justify-between">
+        
+        <!-- Logo (Placeholder) -->
+        <div class="mb-4 md:mb-0">
+           <img src="/imagenesescudo/hlegislatura.png" alt="Escudo Legislatura" class="h-20 w-auto">
+        </div>
+
+        <!-- Título -->
+        <div class="flex-grow">
+          <h1 class="text-2xl md:text-3xl font-black text-gray-800 tracking-wider uppercase">
+            HONORABLE LEGISLATURA DE TUCUMÁN
+          </h1>
+        </div>
+
+        <!-- Reloj -->
+        <div class="mt-2 md:mt-0 bg-gray-100 px-4 py-2 rounded border border-gray-300 shadow-inner">
+          <span id="clock" class="font-mono text-xl font-bold text-legislatura">00:00:00</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- 3. SUB-BARRA (DIRECCIÓN DE TAQUÍGRAFOS) -->
+    <div class="relative z-20 bg-legislatura-dark text-white py-2 text-center shadow-md">
+      <h2 class="text-sm md:text-lg font-bold tracking-widest uppercase">
+        <i class="bi bi-book-half mr-2"></i> DIRECCIÓN DE TAQUÍGRAFOS
+      </h2>
+    </div>
+
+    <!-- 4. ESTRUCTURA PRINCIPAL (SIDEBAR + CONTENIDO) -->
+    <div class="relative z-10 container mx-auto px-4 py-8 min-h-screen flex flex-col md:flex-row gap-8">
+      
+      <!-- SIDEBAR IZQUIERDO (DROPDOWNS DE PERÍODOS) -->
+      <aside class="w-full md:w-64 flex-shrink-0 space-y-4">
+        {periodosMenu.map((periodo) => (
+          <div x-data="{ open: false }" class="group">
+            <!-- Botón del Período -->
+            <button 
+              @click="open = !open"
+              class="w-full text-left bg-blue-900/90 hover:bg-blue-800 text-white py-3 px-4 rounded-lg shadow-lg font-bold flex justify-between items-center transition-all"
+            >
+              <span>{periodo.label}</span>
+              <i class="bi bi-chevron-down transition-transform duration-300" :class="{'rotate-180': open}"></i>
+            </button>
+            
+            <!-- Menú Desplegable -->
+            <ul x-show="open" x-transition class="mt-1 bg-white/95 backdrop-blur rounded-lg shadow-xl overflow-hidden border border-blue-900/20">
+              {periodo.items.map((item) => (
+                <li>
+                  <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-100 hover:text-blue-900 transition border-b border-gray-100 last:border-0">
+                    {item}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
+
+        <!-- Botón "Qué es un período" -->
+        <a href="#" class="block w-full text-center bg-blue-100 hover:bg-blue-200 text-blue-900 py-2 px-4 rounded-lg text-sm font-bold mt-4 transition border border-blue-300">
+          ¿QUÉ ES UN PERÍODO LEGISLATIVO?
+        </a>
+      </aside>
+
+      <!-- CONTENIDO PRINCIPAL (Aquí va tu libro, tablas, etc.) -->
+      <main class="flex-grow w-full">
+        <slot />
+      </main>
+      
+    </div>
+
+    <!-- 5. BOTÓN FLOTANTE WHATSAPP -->
     <a 
-      href="https://wa.me/5493816114185?text=Hola,%20quiero%20más%20información" 
+      href="https://wa.me/5493811234567" 
       target="_blank"
-      rel="noopener noreferrer"
-      class="fixed bottom-6 right-6 z-50 bg-green-500 hover:bg-green-600 text-white p-4 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-110 group"
-      aria-label="Contactar por WhatsApp"
+      class="fixed bottom-6 right-6 z-50 bg-green-500 hover:bg-green-600 text-white p-4 rounded-full shadow-xl hover:scale-110 transition-all duration-300 flex items-center gap-2 group"
     >
       <i class="bi bi-whatsapp text-3xl"></i>
-      <span class="absolute right-full mr-3 top-1/2 -translate-y-1/2 bg-gray-800 text-white text-sm px-3 py-2 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
-        ¡Escríbenos!
+      <span class="max-w-0 overflow-hidden group-hover:max-w-xs transition-all duration-500 whitespace-nowrap font-bold">
+        WhatsApp
       </span>
     </a>
-    <!-- FOOTER -->
-    <footer class="bg-gray-800 text-white py-8 mt-12">
-      <div class="container mx-auto px-4 text-center">
-        <div class="flex justify-center items-center gap-2 mb-4">
-          <i class="bi bi-bank text-2xl"></i>
-          <h3 class="text-lg font-bold">Legislatura de Tucumán</h3>
-        </div>
-        <p class="text-gray-400 text-sm">
-          &copy; {new Date().getFullYear()} Honorable Legislatura de la Provincia de Tucumán
-        </p>
-        <p class="text-gray-500 text-xs mt-2">
-          San Miguel de Tucumán, Argentina
-        </p>
-      </div>
-    </footer>
+
+    <!-- Script para el Reloj -->
+    <script>
+      function updateClock() {
+        const now = new Date();
+        const timeString = now.toLocaleTimeString('es-AR');
+        const clockElement = document.getElementById('clock');
+        if (clockElement) clockElement.textContent = timeString;
+      }
+      setInterval(updateClock, 1000);
+      updateClock();
+    </script>
   </body>
 </html>
-
-<style is:global>
-  @tailwind base;
-  @tailwind components;
-  @tailwind utilities;
-</style>

@@ -1,57 +1,50 @@
 ---
-import { getCollection } from 'astro:content';
 import Layout from '../layouts/Layout.astro';
+import { getCollection } from 'astro:content';
 
 const periodos = await getCollection('periodos');
 const periodosOrdenados = periodos.sort((a, b) => b.data.numero - a.data.numero);
 ---
 
 <Layout title="Inicio">
-  <!-- Hero Section -->
-  <section class="bg-gradient-to-br from-blue-50 to-white py-12 md:py-20">
-    <div class="container mx-auto px-4 text-center">
-      <h1 class="text-4xl md:text-6xl font-bold text-blue-900 mb-4">
-        Períodos Legislativos
-      </h1>
-      <p class="text-gray-600 text-lg md:text-xl max-w-2xl mx-auto">
-        Accede al archivo histórico de sesiones, leyes y autoridades de la Legislatura de Tucumán
-      </p>
+  
+  <!-- Sección central con el Libro (Efecto visual) -->
+  <div class="flex flex-col items-center justify-center text-center space-y-8">
+    
+    <!-- Imagen del Libro (Placeholder por ahora) -->
+    <div class="relative w-full max-w-2xl mx-auto perspective-1000">
+      <!-- Aquí iría tu imagen del libro real -->
+      <div class="bg-amber-900 text-amber-100 p-8 rounded-r-2xl rounded-l-sm shadow-2xl border-l-8 border-amber-950 transform hover:rotate-y-6 transition-transform duration-500">
+        <div class="text-center border-2 border-amber-200/30 p-6 rounded">
+          <h2 class="text-2xl font-black uppercase tracking-widest mb-4">Poder Legislativo</h2>
+          <div class="w-16 h-16 bg-amber-100 rounded-full mx-auto mb-4 flex items-center justify-center text-amber-900">
+             <i class="bi bi-bank text-3xl"></i>
+          </div>
+          <h3 class="text-xl font-bold mb-2">Honorable Legislatura</h3>
+          <p class="text-sm opacity-80">Dirección de Taquígrafos</p>
+        </div>
+      </div>
     </div>
-  </section>
 
-  <!-- Grid de Períodos -->
-  <section class="container mx-auto px-4 py-12">
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-      {periodosOrdenados.map((periodo) => (
-        <a 
-          href={`/periodos/${periodo.id}`}
-          class="group bg-white p-6 rounded-xl shadow-md hover:shadow-2xl transition-all duration-300 border-t-4 border-blue-900 hover:border-blue-600 hover:-translate-y-1"
-        >
-          <div class="flex items-start justify-between mb-4">
-            <div class="bg-blue-100 p-3 rounded-lg group-hover:bg-blue-900 transition-colors">
-              <i class="bi bi-calendar-range text-2xl text-blue-900 group-hover:text-white"></i>
-            </div>
-            <span class="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded">
-              {periodo.data.anio}
-            </span>
-          </div>
-          
-          <h2 class="text-2xl font-bold text-gray-800 group-hover:text-blue-900 transition-colors">
-            {periodo.data.titulo}
-          </h2>
-          
-          {periodo.data.descripcion && (
-            <p class="text-gray-600 mt-2 text-sm line-clamp-2">
-              {periodo.data.descripcion}
-            </p>
-          )}
-          
-          <div class="mt-4 flex items-center text-blue-600 group-hover:text-blue-900 font-medium">
-            <span>Ver detalles</span>
-            <i class="bi bi-arrow-right ml-2 group-hover:translate-x-1 transition-transform"></i>
-          </div>
-        </a>
-      ))}
+    <!-- Botones rápidos (Opcional) -->
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 w-full max-w-3xl mt-12">
+      <a href="/periodos" class="bg-white/80 hover:bg-white p-4 rounded shadow border border-gray-200 text-center hover:text-blue-900 transition">
+        <i class="bi bi-calendar-check text-3xl block mb-2 text-blue-900"></i>
+        <span class="text-sm font-bold">Períodos</span>
+      </a>
+      <a href="#" class="bg-white/80 hover:bg-white p-4 rounded shadow border border-gray-200 text-center hover:text-blue-900 transition">
+        <i class="bi bi-journal-text text-3xl block mb-2 text-blue-900"></i>
+        <span class="text-sm font-bold">Diario de Sesiones</span>
+      </a>
+      <a href="#" class="bg-white/80 hover:bg-white p-4 rounded shadow border border-gray-200 text-center hover:text-blue-900 transition">
+        <i class="bi bi-people text-3xl block mb-2 text-blue-900"></i>
+        <span class="text-sm font-bold">Legisladores</span>
+      </a>
+      <a href="#" class="bg-white/80 hover:bg-white p-4 rounded shadow border border-gray-200 text-center hover:text-blue-900 transition">
+        <i class="bi bi-file-earmark-text text-3xl block mb-2 text-blue-900"></i>
+        <span class="text-sm font-bold">Leyes</span>
+      </a>
     </div>
-  </section>
+
+  </div>
 </Layout>

@@ -1,36 +1,42 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import MenuPeriodos from '../components/MenuPeriodos.astro';
+import Libro3D from '../components/Libro3D.astro';
 ---
 
 <Layout title="Inicio">
   
-  <!-- Sección central con el Libro -->
-  <div class="flex flex-col items-center justify-center space-y-8">
+  <!-- Contenedor principal -->
+  <div class="container mx-auto px-4 py-8">
     
-    <!-- Imagen del Libro Real -->
-    <div class="w-full max-w-3xl mx-auto">
-      <img 
-        src="/libros/libro-taquigrafos.jpg" 
-        alt="Libro de Taquígrafos - Poder Legislativo" 
-        class="w-full h-auto rounded-lg shadow-2xl"
-      >
+    <!-- Sección superior: Menú + Libro 3D -->
+    <div class="grid lg:grid-cols-12 gap-8 mb-12">
+      <!-- Sidebar con dropdowns -->
+      <div class="lg:col-span-3">
+        <MenuPeriodos />
+      </div>
+      
+      <!-- Área central con tarjeta 3D -->
+      <div class="lg:col-span-9">
+        <Libro3D periodo={114} />
+      </div>
     </div>
 
     <!-- Botones de acceso rápido -->
-    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 w-full max-w-3xl mt-8">
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-3xl mx-auto">
       <a href="/periodos" class="bg-white hover:bg-blue-50 p-6 rounded-lg shadow-lg border-2 border-blue-900 text-center hover:shadow-xl transition">
         <i class="bi bi-calendar-check text-4xl block mb-3 text-blue-900"></i>
         <span class="text-sm font-bold text-gray-800">Períodos</span>
       </a>
-      <a href="#" class="bg-white hover:bg-blue-50 p-6 rounded-lg shadow-lg border-2 border-blue-900 text-center hover:shadow-xl transition">
+      <a href="/diario-sesiones" class="bg-white hover:bg-blue-50 p-6 rounded-lg shadow-lg border-2 border-blue-900 text-center hover:shadow-xl transition">
         <i class="bi bi-journal-text text-4xl block mb-3 text-blue-900"></i>
         <span class="text-sm font-bold text-gray-800">Diario de Sesiones</span>
       </a>
-      <a href="#" class="bg-white hover:bg-blue-50 p-6 rounded-lg shadow-lg border-2 border-blue-900 text-center hover:shadow-xl transition">
+      <a href="/legisladores" class="bg-white hover:bg-blue-50 p-6 rounded-lg shadow-lg border-2 border-blue-900 text-center hover:shadow-xl transition">
         <i class="bi bi-people text-4xl block mb-3 text-blue-900"></i>
         <span class="text-sm font-bold text-gray-800">Legisladores</span>
       </a>
-      <a href="#" class="bg-white hover:bg-blue-50 p-6 rounded-lg shadow-lg border-2 border-blue-900 text-center hover:shadow-xl transition">
+      <a href="/leyes" class="bg-white hover:bg-blue-50 p-6 rounded-lg shadow-lg border-2 border-blue-900 text-center hover:shadow-xl transition">
         <i class="bi bi-file-earmark-text text-4xl block mb-3 text-blue-900"></i>
         <span class="text-sm font-bold text-gray-800">Leyes</span>
       </a>

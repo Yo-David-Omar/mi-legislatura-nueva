@@ -1,6 +1,4 @@
 ---
-import MenuPeriodos from '../components/MenuPeriodos.astro';
-
 interface Props {
   title: string;
 }
@@ -32,82 +30,97 @@ const navLinks = [
   
   <body class="bg-gray-100 min-h-screen" style="font-family: 'Merriweather', serif;">
     
-    <!-- 1. BARRA DE NAVEGACIÓN SUPERIOR (ROJA) -->
-    <nav class="bg-red-900 text-white shadow-lg">
-      <div class="container mx-auto px-4">
-        <!-- Menú Horizontal Desktop -->
-        <ul class="hidden md:flex flex-wrap justify-center gap-6 py-3 text-sm font-bold">
-          {navLinks.map((link) => (
-            <li>
-              <a href={link.url} class="hover:text-yellow-300 transition tracking-wide">
-                {link.text}
-              </a>
-            </li>
-          ))}
-        </ul>
-        
-        <!-- Menú Hamburguesa Móvil -->
-        <div x-data="{ open: false }" class="md:hidden flex justify-center py-3">
-          <button @click="open = !open" class="text-white border-2 border-white px-4 py-2 rounded font-bold">
-            <i class="bi bi-list mr-2"></i>MENÚ
-          </button>
-          <ul x-show="open" @click.outside="open = false" class="absolute top-full left-0 w-full bg-red-950 flex flex-col p-4 gap-2 text-center shadow-xl z-50">
+    <!-- CABECERA COMPLETA FIJA -->
+    <div id="header-wrapper" class="fixed top-0 left-0 w-full z-50">
+
+      <!-- NAVBAR -->
+      <nav class="bg-red-900 text-white shadow-lg">
+        <div class="container mx-auto px-4">
+          <ul class="hidden md:flex flex-wrap justify-center gap-6 py-3 text-sm font-bold">
             {navLinks.map((link) => (
               <li>
-                <a href={link.url} class="block py-3 border-b border-white/20 hover:bg-white/10 font-bold">
+                <a href={link.url} class="hover:text-yellow-300 transition tracking-wide">
                   {link.text}
                 </a>
               </li>
             ))}
           </ul>
+
+          <div x-data="{ open: false }" class="md:hidden flex justify-center py-3">
+            <button @click="open = !open" class="text-white border-2 border-white px-4 py-2 rounded font-bold">
+              <i class="bi bi-list mr-2"></i>MENÚ
+            </button>
+
+            <ul
+              x-show="open"
+              @click.outside="open = false"
+              class="absolute top-full left-0 w-full bg-red-950 flex flex-col p-4 gap-2 text-center shadow-xl z-50"
+            >
+              {navLinks.map((link) => (
+                <li>
+                  <a href={link.url} class="block py-3 border-b border-white/20 hover:bg-white/10 font-bold">
+                    {link.text}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
         </div>
+      </nav>
+
+      <!-- HEADER -->
+      <header
+        id="main-header"
+        class="bg-white/95 backdrop-blur-sm shadow-md transition-all duration-300"
+      >
+        <div class="container mx-auto px-4 flex flex-col md:flex-row items-center justify-center gap-6 py-2">
+
+          <div>
+            <img
+              id="logo"
+              src="/imagenescudo/hlegislatura.png"
+              alt="Escudo Legislatura"
+              class="h-20 w-auto transition-all duration-300"
+            >
+          </div>
+
+          <div class="flex-grow text-center md:text-center">
+            <h1
+              id="titulo"
+              class="text-2xl md:text-3xl font-black text-gray-800 tracking-wider uppercase transition-all duration-300"
+            >
+              HONORABLE LEGISLATURA DE TUCUMÁN
+            </h1>
+          </div>
+
+         <div id="reloj-box" class="hidden lg:block bg-gray-100 px-6 py-2 rounded-lg border-2 border-gray-300 shadow-inner transition-all duration-300">
+            <span id="clock" class="font-mono text-2xl font-bold text-red-900">
+              00:00:00
+            </span>
+          </div>
+
+        </div>
+      </header>
+
+      <!-- TAQUIGRAFOS -->
+      <div
+        id="taquigrafos-bar"
+        class="bg-red-950 text-white text-center shadow-md py-3 transition-all duration-300"
+      >
+        <h2 class="text-base md:text-sm font-bold tracking-widest uppercase">
+          <i class="bi bi-book-half mr-2"></i>
+          DIRECCIÓN DE TAQUÍGRAFOS
+        </h2>
       </div>
-    </nav>
 
-    <!-- 2. HEADER INSTITUCIONAL -->
-    <header class="bg-white/95 backdrop-blur-sm shadow-md py-6">
-      <div class="container mx-auto px-4 flex flex-col md:flex-row items-center justify-between gap-4">
-        
-        <!-- Logo/Escudo -->
-        <div class="mb-4 md:mb-0">
-          <img src="/imagenesescudo/escudo.png" alt="Escudo Legislatura" class="h-20 w-auto">
-        </div>
-
-        <!-- Título -->
-        <div class="flex-grow text-center md:text-left">
-          <h1 class="text-2xl md:text-3xl font-black text-gray-800 tracking-wider uppercase">
-            HONORABLE LEGISLATURA DE TUCUMÁN
-          </h1>
-        </div>
-
-        <!-- Reloj -->
-        <div class="bg-gray-100 px-6 py-3 rounded-lg border-2 border-gray-300 shadow-inner">
-          <span id="clock" class="font-mono text-2xl font-bold text-red-900">00:00:00</span>
-        </div>
-      </div>
-    </header>
-
-    <!-- 3. SUB-BARRA (DIRECCIÓN DE TAQUÍGRAFOS) -->
-    <div class="bg-red-950 text-white py-3 text-center shadow-md">
-      <h2 class="text-base md:text-lg font-bold tracking-widest uppercase">
-        <i class="bi bi-book-half mr-2"></i> DIRECCIÓN DE TAQUÍGRAFOS
-      </h2>
     </div>
 
-    <!-- 4. ESTRUCTURA PRINCIPAL (SIDEBAR + CONTENIDO) -->
-    <div class="container mx-auto px-4 py-8 min-h-screen flex flex-col md:flex-row gap-8">
-      
-      <!-- SIDEBAR IZQUIERDO (COMPONENTE DINÁMICO) -->
-      <MenuPeriodos />
-
-      <!-- CONTENIDO PRINCIPAL -->
-      <main class="flex-grow w-full">
-        <slot />
-      </main>
-      
+    <!-- CONTENIDO PRINCIPAL -->
+    <div class="container mx-auto px-4 pt-[220px] min-h-screen">
+      <slot />
     </div>
 
-    <!-- 5. BOTÓN FLOTANTE WHATSAPP -->
+    <!-- BOTÓN FLOTANTE WHATSAPP -->
     <a 
       href="https://wa.me/5493811234567" 
       target="_blank"
@@ -127,8 +140,30 @@ const navLinks = [
         const clockElement = document.getElementById('clock');
         if (clockElement) clockElement.textContent = timeString;
       }
+
       setInterval(updateClock, 1000);
       updateClock();
+
+      window.addEventListener('scroll', () => {
+        const logo = document.getElementById('logo');
+        const titulo = document.getElementById('titulo');
+        const reloj = document.getElementById('reloj-box');
+        const barra = document.getElementById('taquigrafos-bar');
+
+        if (window.scrollY > 100) {
+          logo.style.height = '50px';
+          titulo.style.fontSize = '1.4rem';
+          reloj.style.padding = '6px 12px';
+          barra.style.paddingTop = '6px';
+          barra.style.paddingBottom = '6px';
+        } else {
+          logo.style.height = '50px';
+          titulo.style.fontSize = '';
+          reloj.style.padding = '';
+          barra.style.paddingTop = '';
+          barra.style.paddingBottom = '';
+        }
+      });
     </script>
   </body>
 </html>

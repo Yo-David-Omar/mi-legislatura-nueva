@@ -7,7 +7,7 @@ const periodosOrdenados = periodos.sort((a, b) => b.data.numero - a.data.numero)
 ---
 
 <!-- SIDEBAR IZQUIERDO CON DROPDOWNS -->
-<aside class="w-full md:w-72 flex-shrink-0 space-y-4">
+<aside class="w-full md:w-50 flex-shrink-0 space-y-4">
   {periodosOrdenados.map((periodo) => (
     <div x-data="{ open: false }" class="group">
       <!-- Botón del Período -->

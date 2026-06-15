@@ -1,0 +1,82 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { getCollection } from 'astro:content';
+import MenuPeriodos from '../../components/MenuPeriodos.astro';
+
+const sesiones = await getCollection('sesiones');
+const sesionesOrdenadas = sesiones.sort((a, b) => a.data.numero - b.data.numero);
+---
+
+<Layout title="Diario de Sesiones">
+  
+  <!-- Header de la página -->
+  <div class="bg-red-900 text-white py-4 mb-8">
+    <div class="container mx-auto px-4">
+      <h1 class="text-3xl font-bold text-center">
+        <i class="bi bi-journal-text mr-3"></i>
+        DIARIO DE SESIONES
+      </h1>
+      <p class="text-center text-red-200 mt-2">
+        114° Período Legislativo (01/03/2019 - 29/02/2020)
+      </p>
+    </div>
+  </div>
+
+  <!-- Cuadro de Sesiones -->
+  <div class="container mx-auto px-4 mb-8">
+    <div class="bg-white rounded-lg shadow-xl overflow-hidden">
+      <div class="bg-gradient-to-r from-blue-900 to-blue-700 text-white py-3 px-6">
+        <h2 class="text-xl font-bold">
+          <i class="bi bi-table mr-2"></i>
+          CUADRO DE SESIONES
+        </h2>
+      </div>
+      
+      <div class="overflow-x-auto">
+        <table class="w-full">
+          <thead class="bg-blue-100">
+            <tr>
+              <th class="border-2 border-blue-300 px-4 py-3 text-left font-bold text-blue-900">N°</th>
+              <th class="border-2 border-blue-300 px-4 py-3 text-left font-bold text-blue-900">FECHA</th>
+              <th class="border-2 border-blue-300 px-4 py-3 text-left font-bold text-blue-900">REUNIÓN</th>
+              <th class="border-2 border-blue-300 px-4 py-3 text-left font-bold text-blue-900">TIPO DE SESIÓN</th>
+              <th class="border-2 border-blue-300 px-4 py-3 text-left font-bold text-blue-900">FOJAS</th>
+              <th class="border-2 border-blue-300 px-4 py-3 text-left font-bold text-blue-900">ACCIÓN</th>
+            </tr>
+          </thead>
+          <tbody>
+            {sesionesOrdenadas.map((sesion, index) => (
+              <tr class={index % 2 === 0 ? 'bg-blue-50' : 'bg-white'}>
+                <td class="border-2 border-blue-200 px-4 py-3 text-center font-bold text-blue-900">
+                  {sesion.data.numero}
+                </td>
+                <td class="border-2 border-blue-200 px-4 py-3 text-blue-800">
+                  {new Date(sesion.data.fecha).toLocaleDateString('es-AR')}
+                </td>
+                <td class="border-2 border-blue-200 px-4 py-3 text-center font-bold text-blue-900">
+                  {sesion.data.reunion}
+                </td>
+                <td class="border-2 border-blue-200 px-4 py-3 text-blue-800">
+                  {sesion.data.tipo}
+                </td>
+                <td class="border-2 border-blue-200 px-4 py-3 text-center text-blue-800">
+                  {sesion.data.fojas}
+                </td>
+                <td class="border-2 border-blue-200 px-4 py-3 text-center">
+                  <a 
+                    href={`/sesion/${sesion.id}`}
+                    class="inline-flex items-center gap-2 bg-blue-900 hover:bg-blue-800 text-white px-4 py-2 rounded-lg transition font-bold"
+                  >
+                    <i class="bi bi-book"></i>
+                    Ver Sesión
+                  </a>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+</Layout>

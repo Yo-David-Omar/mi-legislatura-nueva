@@ -1,0 +1,227 @@
+---
+// src/components/Libro3D.astro
+interface Props {
+  periodo: number;
+}
+
+const { periodo } = Astro.props;
+
+const periodosData = {
+  117: {
+    tomo: "Tomo 117",
+    fecha: "01/03/2022 - 28/02/2023",
+    provincia: "Provincia de Tucumán",
+    sesiones: "45",
+    leyes: "128"
+  },
+  116: {
+    tomo: "Tomo 116",
+    fecha: "01/03/2021 - 28/02/2022",
+    provincia: "Provincia de Tucumán",
+    sesiones: "42",
+    leyes: "115"
+  },
+  115: {
+    tomo: "Tomo 115",
+    fecha: "01/03/2020 - 28/02/2021",
+    provincia: "Provincia de Tucumán",
+    sesiones: "38",
+    leyes: "98"
+  },
+  114: {
+    tomo: "Tomo 114",
+    fecha: "01/03/2019 - 29/02/2020",
+    provincia: "Provincia de Tucumán",
+    sesiones: "40",
+    leyes: "105"
+  }
+};
+
+const data = periodosData[periodo as keyof typeof periodosData] || periodosData[114];
+---
+
+<div class="hover-3d-container">
+  <div class="libro-3d-card">
+    <div class="libro-cover">
+      <div class="libro-content">
+        <div class="escudo-container">
+          <img src="/imagenescudo/escudotucuman.png" alt="Escudo" class="escudo" />
+        </div>
+        <h2 class="titulo-tomo">{data.tomo}</h2>
+        <div class="linea-separadora"></div>
+        <p class="provincia">{data.provincia}</p>
+        <p class="fecha">{data.fecha}</p>
+        
+        <div class="stats-grid">
+          <div class="stat-box">
+            <span class="stat-number">{data.sesiones}</span>
+            <span class="stat-label">Sesiones</span>
+          </div>
+          <div class="stat-box">
+            <span class="stat-number">{data.leyes}</span>
+            <span class="stat-label">Leyes</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- 8 divs vacíos para el efecto 3D -->
+    <div class="layer"></div>
+    <div class="layer"></div>
+    <div class="layer"></div>
+    <div class="layer"></div>
+    <div class="layer"></div>
+    <div class="layer"></div>
+    <div class="layer"></div>
+    <div class="layer"></div>
+  </div>
+</div>
+
+<style>
+  .hover-3d-container {
+    perspective: 1000px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 2rem;
+  }
+
+  .libro-3d-card {
+    position: relative;
+    width: 400px;
+    height: 550px;
+    transform-style: preserve-3d;
+    transition: transform 0.5s ease;
+    cursor: pointer;
+  }
+
+  .libro-3d-card:hover {
+    transform: rotateY(15deg) rotateX(5deg) scale(1.15);
+    perspective: 1000px;
+    box-shadow:
+    0 10px 30px rgba(0,0,0,.10),
+    0 30px 60px rgba(0,0,0,.08);
+  }
+
+  .libro-cover {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+    135deg,
+    #8C522E 0%,
+    #8A1E1E 50%,
+    #000000 100%
+    );
+    border-radius: 10px 15px 15px 10px;
+    box-shadow: 
+      -5px 5px 15px rgba(0,0,0,0.4),
+      inset 2px 0 5px rgba(255,255,255,0.1),
+      inset -2px 0 5px rgba(0,0,0,0.3);
+    transform: translateZ(50px);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 2rem;
+    border: 3px solid #4A2C17;
+  }
+
+  .escudo {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+
+  .titulo-tomo {
+    font-family: 'Times New Roman', serif;
+    font-size: 2.5rem;
+    color: #D4AF37;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    margin-bottom: 1rem;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+    text-align: center;
+  }
+
+  .linea-separadora {
+    width: 150px;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, #D4AF37, transparent);
+    margin: 1.5rem 0;
+  }
+
+  .provincia {
+    font-family: 'Times New Roman', serif;
+    font-size: 1.3rem;
+    color: #F5E6D3;
+    margin-bottom: 0.5rem;
+    text-align: center;
+  }
+
+  .fecha {
+    font-size: 1rem;
+    color: #D4AF37;
+    margin-bottom: 2rem;
+    text-align: center;
+  }
+
+  .stats-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    width: 100%;
+  }
+
+  .stat-box {
+    background: rgba(0,0,0,0.3);
+    padding: 1rem;
+    border-radius: 8px;
+    text-align: center;
+    border: 1px solid rgba(212, 175, 55, 0.3);
+  }
+
+  .stat-number {
+    display: block;
+    font-size: 2rem;
+    font-weight: bold;
+    color: #D4AF37;
+  }
+
+  .stat-label {
+    font-size: 0.9rem;
+    color: #F5E6D3;
+  }
+
+  .layer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #654321 0%, #5C3317 100%);
+    border-radius: 10px 15px 15px 10px;
+    transform: translateZ(calc(-50px + var(--i) * 5px));
+    opacity: calc(1 - var(--i) * 0.1);
+  }
+
+  .layer:nth-child(2) { --i: 1; }
+  .layer:nth-child(3) { --i: 2; }
+  .layer:nth-child(4) { --i: 3; }
+  .layer:nth-child(5) { --i: 4; }
+  .layer:nth-child(6) { --i: 5; }
+  .layer:nth-child(7) { --i: 6; }
+  .layer:nth-child(8) { --i: 7; }
+  .layer:nth-child(9) { --i: 8; }
+
+  @media (max-width: 768px) {
+    .libro-3d-card {
+      width: 300px;
+      height: 420px;
+    }
+    
+    .titulo-tomo {
+      font-size: 1.8rem;
+    }
+  }
+</style>

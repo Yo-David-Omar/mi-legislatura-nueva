@@ -1,0 +1,159 @@
+---
+import { getCollection } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+
+export async function getStaticPaths() {
+  const sesiones = await getCollection('sesiones');
+  return sesiones.map((sesion) => ({
+    params: { numero: sesion.id },
+    props: { sesion },
+  }));
+}
+
+const { sesion } = Astro.props;
+---
+
+<Layout title={`Sesión ${sesion.data.numero}`}>
+  
+  <!-- Header de la sesión -->
+  <div class="bg-gradient-to-r from-blue-900 to-blue-700 text-white py-6 mb-8">
+    <div class="container mx-auto px-4 text-center">
+      <h1 class="text-3xl font-bold mb-2">
+        {sesion.data.reunion} REUNIÓN
+      </h1>
+      <p class="text-xl text-blue-200">
+        {sesion.data.tipo} - {new Date(sesion.data.fecha).toLocaleDateString('es-AR')}
+      </p>
+    </div>
+  </div>
+
+  <!-- Layout de Libro Abierto -->
+  <div class="container mx-auto px-4 mb-8">
+    <div class="flex flex-col lg:flex-row gap-6">
+      
+      <!-- PÁGINA IZQUIERDA: Sumario/Índice -->
+      <div class="lg:w-1/3 bg-gradient-to-br from-blue-50 to-white p-8 rounded-lg shadow-xl border-4 border-amber-900/30">
+        <div class="bg-white p-6 rounded min-h-[600px]">
+          <h2 class="text-2xl font-bold text-blue-900 mb-6 text-center border-b-4 border-blue-900 pb-3">
+            SUMARIO
+          </h2>
+          
+          <div class="space-y-4">
+            <div class="bg-blue-100 p-4 rounded-lg">
+              <h3 class="font-bold text-blue-900 mb-2">
+                1. IZAMIENTO DE LAS BANDERAS
+              </h3>
+              <p class="text-sm text-gray-700">
+                Oficial de la Nación, Nacional de la Libertad Civil, y de la Provincia de Tucumán.
+              </p>
+              <p class="text-xs text-gray-500 mt-2">(pág. 3)</p>
+            </div>
+
+            <div class="bg-blue-100 p-4 rounded-lg">
+              <h3 class="font-bold text-blue-900 mb-2">
+                2. SESIÓN DE APERTURA. CITACIÓN
+              </h3>
+              <p class="text-sm text-gray-700">
+                Decreto de la Presidencia n° 03-HL-19 de fecha 25 de febrero de 2019.
+              </p>
+              <p class="text-xs text-gray-500 mt-2">(pág. 4)</p>
+            </div>
+
+            <div class="bg-blue-100 p-4 rounded-lg">
+              <h3 class="font-bold text-blue-900 mb-2">
+                3. COMUNICACIÓN DE CITACIÓN AL PODER EJECUTIVO
+              </h3>
+              <p class="text-sm text-gray-700">
+                Lectura de nota n° 03/2019, de la H. Legislatura.
+              </p>
+              <p class="text-xs text-gray-500 mt-2">(pág. 4)</p>
+            </div>
+
+            <div class="bg-blue-100 p-4 rounded-lg">
+              <h3 class="font-bold text-blue-900 mb-2">
+                4. DESIGNACIÓN DE COMISIONES
+              </h3>
+              <p class="text-sm text-gray-700">
+                Designación de miembros para integrar las comisiones permanentes.
+              </p>
+              <p class="text-xs text-gray-500 mt-2">(pág. 5)</p>
+            </div>
+          </div>
+
+          <!-- Botón Sumario -->
+          <div class="mt-8 text-center">
+            <button class="bg-blue-900 hover:bg-blue-800 text-white px-6 py-3 rounded-lg font-bold transition">
+              <i class="bi bi-arrow-down mr-2"></i>
+              VER SUMARIO COMPLETO
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- PÁGINA DERECHA: Contenido de la sesión -->
+      <div class="lg:w-2/3 bg-gradient-to-br from-amber-50 to-white p-8 rounded-lg shadow-xl border-4 border-amber-900/30">
+        <div class="bg-white p-8 rounded min-h-[800px] font-serif">
+          
+          <!-- Portada del contenido -->
+          <div class="text-center mb-8 border-b-2 border-blue-900 pb-6">
+            <h2 class="text-3xl font-bold text-blue-900 mb-4">
+              HONORABLE LEGISLATURA
+            </h2>
+            <h3 class="text-2xl text-blue-700 mb-2">
+              DIARIO DE SESIONES
+            </h3>
+            <div class="w-24 h-24 mx-auto my-4">
+              <img src="/imagenesescudo/hlegislatura.png" alt="Escudo" class="w-full">
+            </div>
+            <p class="text-lg text-blue-900 font-bold">
+              {sesion.data.reunion} REUNIÓN
+            </p>
+            <p class="text-blue-700">
+              {sesion.data.tipo.toUpperCase()}
+            </p>
+            <p class="text-gray-600 mt-4">
+              {new Date(sesion.data.fecha).toLocaleDateString('es-AR', { 
+                weekday: 'long', 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric' 
+              })}
+            </p>
+          </div>
+
+          <!-- Contenido de la sesión -->
+          <div class="prose max-w-none text-gray-800 leading-relaxed space-y-4">
+            <div set:html={sesion.body} />
+            
+            <p class="text-justify">
+              <strong>Artículo 1°.-</strong> Cítese por Secretaría a los señores legisladores para reunirse en Sesión de Apertura del {sesion.data.periodo}° Período Legislativo, el día {new Date(sesion.data.fecha).toLocaleDateString('es-AR')}, a horas 09:00, a efectos de lo dispuesto en el artículo 101, inciso 8° de la Constitución de la Provincia.
+            </p>
+
+            <p class="text-justify">
+              <strong>Art. 2°.-</strong> Comuníquese y archívese.
+            </p>
+
+            <div class="mt-8 text-right">
+              <p class="font-bold">Sala de la Presidencia, 25 de febrero de 2019.</p>
+            </div>
+
+            <div class="mt-8 border-t-2 border-gray-300 pt-4">
+              <p class="font-bold">Firmado:</p>
+              <p><strong>CPN Osvaldo Francisco Jaldo</strong>, Presidente, Honorable Legislatura de Tucumán;</p>
+              <p><strong>Claudio Antonio Pérez</strong>, Secretario, Honorable Legislatura de Tucumán.</p>
+            </div>
+
+            <!-- Número de página -->
+            <div class="mt-12 text-center">
+              <div class="inline-block border-2 border-gray-400 px-6 py-2">
+                <span class="font-bold text-xl">3</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</Layout>

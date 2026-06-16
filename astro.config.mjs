@@ -3,7 +3,7 @@ import tailwindcss from '@tailwindcss/vite';
 import alpinejs from '@astrojs/alpinejs';
 
 export default defineConfig({
-  integrations: [alpinejs(), tailwindcss()],
+  integrations: [alpinejs()],
   vite: {
     plugins: [tailwindcss()],
   },
